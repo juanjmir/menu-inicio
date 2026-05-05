@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas de Novedades</title>
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+   
+    <link rel="stylesheet" href="styles.css">
+    <!-- Cargamos Chart.js para los velocímetros -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Dashboard Estadístico - INACAP</h1>
+        <a href="index.html" style="color:white; text-decoration:none;">← Volver al Panel</a>
+    </header>
+
+    <main class="container">
+        <!-- Filtros de Tiempo -->
+        <section class="card" style="grid-column: 1 / -1;">
+            <h3>Rango de Fecha</h3>
+            <div class="d-flex flex-wrap gap-3 align-items-end">
+                <div class="d-flex flex-column" style="min-width: 220px;">
+                    <label for="fechaInicio" class="form-label mb-1">Desde</label>
+                    <input type="date" id="fechaInicio" class="form-control date-input">
+                </div>
+                <div class="d-flex flex-column" style="min-width: 220px;">
+                    <label for="fechaFin" class="form-label mb-1">Hasta</label>
+                    <input type="date" id="fechaFin" class="form-control date-input">
+                </div>
+                <button id="btnFiltrar" class="btn btn-primary btn-lg">Mostrar Novedades</button>
+            </div>
+        </section>
+
+        <!-- Filtro Docente -->
+        <section class="card">
+            <h3>Novedades por Docente</h3>
+            <select id="selectDocente"><option value="">Seleccione Docente...</option></select>
+            <div id="resumenDocente" style="font-size: 2rem; font-weight: bold; margin-top: 10px; color: #003366;">0</div>
+            <p>registros en el periodo</p>
+        </section>
+
+        <!-- Filtro Laboratorio -->
+        <section class="card" style="min-width: 430px;">
+            <h3>Novedades por Laboratorio</h3>
+            <select id="selectLab"><option value="">Seleccione Laboratorio...</option></select>
+            <div id="resumenLab" style="font-size: 2rem; font-weight: bold; margin-top: 10px; color: #003366;">0</div>
+            <p>registros en el periodo</p>
+        </section>
+
+<!-- gráfico-->
+<section class="card" style="grid-column: 1 / -1;">
+    <h3>Estado de Novedades por Laboratorio</h3>
+    <div id="contenedorVelocimetros" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+        <!-- Los velocímetros se generarán aquí automáticamente -->
+    </div>
+</section>
+    </main>
+
+    <script src="estadisticas.js"></script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+:root {
+    --primary: #a3bed5;
+    --accent: #f0c8d1;
+    --bg: #f7f8fb;
+    --text: #434a56;
+    --panel: #ffffff;
+    --border-soft: #dde2e8;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    color: var(--text);
+}
+
+header {
+    background-color: var(--primary);
+    color: #283347;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(32, 42, 58, 0.08);
+}
+
+.search-bar input {
+    margin-top: 1rem;
+    padding: 12px 20px;
+    width: 60%;
+    border-radius: 25px;
+    border: 1px solid var(--border-soft);
+    background-color: #f4f7fd;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.date-input {
+    border-radius: 1rem;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-soft);
+    background: #f6f7fb;
+    color: var(--text);
+    box-shadow: inset 0 1px 2px rgba(33, 48, 74, 0.08);
+}
+
+.date-input:focus {
+    border-color: rgba(163, 190, 213, 0.9);
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(163, 190, 213, 0.25);
+}
+
+.date-input::-webkit-calendar-picker-indicator {
+    filter: brightness(0.9) saturate(0.8);
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+    padding: 40px;
+}
+
+.card {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 22px;
+    box-shadow: 0 12px 24px rgba(44, 62, 80, 0.06);
+    border-left: 8px solid var(--accent);
+    transition: transform 0.3s ease;
+}
+
+.card:hover { transform: translateY(-5px); }
+
+.card h3 {
+    margin-top: 0;
+    color: #3f5168;
+    border-bottom: 1px solid var(--border-soft);
+    padding-bottom: 10px;
+}
+
+.label { font-weight: 600; color: #6b7280; font-size: 0.9rem; }
+
+.badge {
+    display: inline-block;
+    background: #f6f3ff;
+    color: #5a5278;
+    padding: 5px 12px;
+    border-radius: 0.9rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
