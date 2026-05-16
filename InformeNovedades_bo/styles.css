@@ -89,3 +89,8 @@ header {
     font-weight: 700;
     margin-bottom: 10px;
 }
+
+.hidden-card,
+.hidden-card[hidden] {
+    display: none !important;
+}

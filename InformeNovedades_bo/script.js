@@ -26,7 +26,7 @@ async function obtenerDatos() {
 function renderCards(novedades) {
     grid.innerHTML = ''; 
     
-    novedades.forEach(item => {
+    novedades.forEach((item, index) => {
         const card = document.createElement('div');
         card.className = 'card';
         
@@ -34,6 +34,15 @@ function renderCards(novedades) {
             const foundKey = Object.keys(item).find(k => k.toLowerCase().trim() === key.toLowerCase());
             return foundKey ? item[foundKey] : null;
         };
+
+        const estadoKey = Object.keys(item).find(k => k.toLowerCase().trim() === 'estado');
+        const estado = estadoKey ? item[estadoKey] : '';
+        const completadoChecked = estado && estado.toString().toLowerCase().trim() === 'completado';
+
+        if (completadoChecked) {
+            card.hidden = true;
+            card.classList.add('hidden-card');
+        }
 
         // --- FORMATEO DE FECHA ---
         let fechaMostrar = "";
@@ -68,6 +77,10 @@ function renderCards(novedades) {
         const detalle = getData('DESCRIPCION GENERAL') || 'Sin detalle';
 
         card.innerHTML = `
+            <div class="form-check completed-check">
+                <input class="form-check-input" type="checkbox" id="completado-${index}" ${completadoChecked ? 'checked' : ''}>
+                <label class="form-check-label" for="completado-${index}">Completado</label>
+            </div>
             <div class="badge">${laboratorio}</div>
             <h3>${docente}</h3>
             <p><span class="label">Asignatura:</span> ${asignatura}</p>
@@ -77,6 +90,22 @@ function renderCards(novedades) {
                 📅 ${fechaMostrar} &nbsp; 🕒 ${horarioMostrar} hrs
             </p>
         `;
+
+        const checkbox = card.querySelector(`#completado-${index}`);
+        if (checkbox) {
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    if (estadoKey) {
+                        item[estadoKey] = 'Completado';
+                    } else {
+                        item.Estado = 'Completado';
+                    }
+                    card.hidden = true;
+                    card.classList.add('hidden-card');
+                }
+            });
+        }
+
         grid.appendChild(card);
     });
 }
