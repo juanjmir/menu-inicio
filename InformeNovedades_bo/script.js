@@ -81,9 +81,10 @@ function renderCards(novedades) {
                 <input class="form-check-input" type="checkbox" id="completado-${index}" ${completadoChecked ? 'checked' : ''}>
                 <label class="form-check-label" for="completado-${index}">Completado</label>
             </div>
-            <div class="label">Reporte Informe Novedades</div>
+            
             <div class="badge">${laboratorio}</div>
             <h3>${docente}</h3>
+            <div class="label">Reporte Informe Novedades</div>
             <p><span class="label">Asignatura:</span> ${asignatura}</p>
             <p><span class="label">Problema Detectado:</span> ${tipo}</p>
             <p><span class="label">Detalle:</span> ${detalle}</p>
