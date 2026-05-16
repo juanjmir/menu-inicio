@@ -8,6 +8,86 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Contenedor general que permite scroll si el contenido es muy ancho */
+#novedadesGrid {
+    width: 100%;
+    overflow-x: auto;
+    margin-top: 20px;
+    border: 1px solid #ccc; /* Contenedor exterior */
+}
+
+/* Tabla base */
+.excel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+    font-size: 0.85rem;
+    color: #333;
+    background-color: #fff;
+    min-width: 1000px; /* Evita que las columnas se aplasten en pantallas chicas */
+}
+
+/* Forzar bordes y alineación en encabezados */
+.excel-table th {
+    background-color: #f2f2f2;
+    color: #444;
+    font-weight: bold;
+    padding: 8px 10px;
+    border: 1px solid #c0c0c0; /* El gris clásico de Excel */
+    text-align: left;
+    white-space: nowrap; /* Evita que el título se parta en dos líneas */
+}
+
+/* Forzar bordes y espacio en las celdas de datos */
+.excel-table td {
+    padding: 8px 10px;
+    border: 1px solid #dcdcdc; /* Líneas de división de celdas */
+    vertical-align: top; /* Hace que los textos largos se alineen arriba */
+}
+
+/* Ancho controlado para las columnas más críticas */
+.excel-table th:nth-child(1), .excel-table td:nth-child(1) { width: 60px; text-align: center; } /* Estado */
+.excel-table th:nth-child(2), .excel-table td:nth-child(2) { width: 90px; text-align: center; } /* Fecha */
+.excel-table th:nth-child(3), .excel-table td:nth-child(3) { width: 90px; text-align: center; } /* Horario */
+.excel-table th:nth-child(4), .excel-table td:nth-child(4) { width: 100px; text-align: center; } /* Laboratorio */
+
+/* Columna de descripción: le damos más espacio por textos largos */
+.excel-table td:nth-child(8) {
+    min-width: 250px;
+    white-space: pre-line; /* Respeta los saltos de línea del texto de insumos */
+}
+
+/* Filas alternas */
+.excel-table tbody tr:nth-child(even) {
+    background-color: #fdfdfd;
+}
+
+/* Hover al pasar el mouse */
+.excel-table tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Fila completada */
+.excel-table tbody tr.row-completed {
+    background-color: #ebf7ed !important;
+    color: #888;
+}
+.excel-table tbody tr.row-completed td {
+    text-decoration: line-through;
+    text-decoration-color: rgba(0,0,0,0.15);
+}
+
+/* Badge del Laboratorio */
+.table-badge {
+    background-color: #0d6efd;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+    </style>
 </head>
 <body>
     <header>
