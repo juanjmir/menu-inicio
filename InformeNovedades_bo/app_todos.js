@@ -93,11 +93,7 @@ function renderTabla(novedades) {
 
         // Creamos la fila
         const row = document.createElement('tr');
-        // Si ya está completado, podemos añadir una clase visual ligera en vez de ocultarlo por completo
-        if (completadoChecked) {
-            row.classList.add('row-completed');
-        }
-
+   
         row.innerHTML = `
             <td style="text-align: center;">
                 <input class="form-check-input table-checkbox" type="checkbox" id="completado-${index}" ${completadoChecked ? 'checked' : ''}>
@@ -110,10 +106,6 @@ function renderTabla(novedades) {
             <td>${tipo}</td>
             <td>${detalle}</td>
         `;
-
-        // Evento del Checkbox modificado para que no destruya ni oculte la fila, solo cambie estado visual
-        const checkbox = row.querySelector(`#completado-${index}`);
-  
 
         tbody.appendChild(row);
     });
