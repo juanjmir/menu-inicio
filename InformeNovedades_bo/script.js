@@ -83,7 +83,7 @@ function renderCards(novedades) {
             </div>
             
             <div class="badge">${laboratorio}</div>
-            <h3>${docente}</h3>
+            <h4>${docente}</h4>
             <div class="label">Reporte Informe Novedades</div>
             <p><span class="label">Asignatura:</span> ${asignatura}</p>
             <p><span class="label">Problema Detectado:</span> ${tipo}</p>
