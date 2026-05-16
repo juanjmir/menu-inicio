@@ -29,21 +29,35 @@
 }
 
 /* Forzar bordes y alineación en encabezados */
-.excel-table th {
-    background-color: #f2f2f2;
-    color: #444;
-    font-weight: bold;
-    padding: 8px 10px;
-    border: 1px solid #c0c0c0; /* El gris clásico de Excel */
-    text-align: left;
-    white-space: nowrap; /* Evita que el título se parta en dos líneas */
+.excel-table td {
+    padding: 10px 12px;
+    border: 1px solid #dcdcdc;
+    vertical-align: middle; /* <-- Ahora todo se centra verticalmente por defecto */
 }
 
-/* Forzar bordes y espacio en las celdas de datos */
-.excel-table td {
-    padding: 8px 10px;
-    border: 1px solid #dcdcdc; /* Líneas de división de celdas */
-    vertical-align: top; /* Hace que los textos largos se alineen arriba */
+/* Las columnas con mucho texto las dejamos arriba para que se lea mejor */
+.excel-table td:nth-child(5), /* Docente */
+.excel-table td:nth-child(6), /* Asignatura */
+.excel-table td:nth-child(7), /* Problema Detectado */
+.excel-table td:nth-child(8) { /* Descripción General */
+    vertical-align: top; 
+}
+
+/* Modificación: Ajustes de ancho para evitar saltos de texto feos */
+.excel-table th:nth-child(1), .excel-table td:nth-child(1) { width: 50px; text-align: center; } /* Estado */
+.excel-table th:nth-child(2), .excel-table td:nth-child(2) { width: 105px; text-align: center; white-space: nowrap; } /* Fecha (No se rompe) */
+.excel-table th:nth-child(3), .excel-table td:nth-child(3) { width: 95px; text-align: center; white-space: nowrap; } /* Horario (No se rompe) */
+.excel-table th:nth-child(4), .excel-table td:nth-child(4) { width: 100px; text-align: center; } /* Laboratorio */
+
+/* Una ligera sombra a las cabeceras para que tenga más aspecto de aplicación corporativa */
+.excel-table th {
+    background-color: #f8f9fa;
+    color: #495057;
+    font-weight: 600;
+    padding: 10px 12px;
+    border: 1px solid #cfd4da;
+    text-align: left;
+    white-space: nowrap;
 }
 
 /* Ancho controlado para las columnas más críticas */
