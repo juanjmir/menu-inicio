@@ -113,23 +113,7 @@ function renderTabla(novedades) {
 
         // Evento del Checkbox modificado para que no destruya ni oculte la fila, solo cambie estado visual
         const checkbox = row.querySelector(`#completado-${index}`);
-        if (checkbox) {
-            checkbox.addEventListener('change', () => {
-                const nuevoEstado = checkbox.checked ? 'Completado' : 'Pendiente';
-                if (estadoKey) {
-                    item[estadoKey] = nuevoEstado;
-                } else {
-                    item.Estado = nuevoEstado;
-                }
-                
-                // Efecto visual: si se marca, se añade un opacidad o tachado sutil en vez de desaparecer
-                if (checkbox.checked) {
-                    row.classList.add('row-completed');
-                } else {
-                    row.classList.remove('row-completed');
-                }
-            });
-        }
+  
 
         tbody.appendChild(row);
     });
