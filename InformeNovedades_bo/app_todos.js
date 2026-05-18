@@ -89,7 +89,7 @@ function renderTabla(novedades) {
         const laboratorio = getData('Laboratorio') || 'S/N';
         const tipo = getData('PROBLEMAS DETECTADOS') || 'General';
         const detalle = getData('DESCRIPCION GENERAL') || 'Sin detalle';
-        const encargador = getData('encargado') || 'Sin detalle';
+        const encargado = getData('encargado') || 'Sin detalle';
         const fecha_fin = getData('fecha termino') || 'Sin detalle';
 
         // Creamos la fila
