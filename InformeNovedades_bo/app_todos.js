@@ -1,4 +1,4 @@
-const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
+const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbyYA8txjE7PyfVpwLL2AY36uIocrF36CDmYx1BbNkKci4GcnH4FaB2c38m3oxa0v1Uy/exec";
 
 // Cambiamos la referencia al contenedor (asegúrate de que en tu HTML sea un div o un contenedor limpio)
 const contenedorTabla = document.getElementById('novedadesGrid');
