@@ -1,7 +1,8 @@
-
-const URL_API_ACTUALIZAR = "https://script.google.com/macros/s/AKfycbyTwvTRAX1nO6LM2odG7ajFJCyCbMEx9up9PvHecGocSqdjvruHxkccxTunfoqd-Mxp/exec"; 
+// 1. URL para leer los datos (Tu URL que ya funcionaba)
 const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
 
+// 2. URL DE TU NUEVO PROYECTO "actualizanovedades" (Pega tu nueva URL aquí)
+const URL_API_ACTUALIZAR = "https://script.google.com/macros/s/AKfycbyTwvTRAX1nO6LM2odG7ajFJCyCbMEx9up9PvHecGocSqdjvruHxkccxTunfoqd-Mxp/exec"; 
 
 const grid = document.getElementById('novedadesGrid');
 let datosExcel = []; 
