@@ -1,5 +1,5 @@
 //lee data
-const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
+const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbyYA8txjE7PyfVpwLL2AY36uIocrF36CDmYx1BbNkKci4GcnH4FaB2c38m3oxa0v1Uy/exec";
 
 //modifica estado
 const URL_API_ACTUALIZAR = "https://script.google.com/macros/s/AKfycbw0tYs3HVeNurnKRpLwbamNAAlLxH5urwNnmmv_5Xadm8zIVLvx-tN0XDMGc4_X974W/exec"; 
