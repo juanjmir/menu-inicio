@@ -141,12 +141,20 @@ function renderCards(novedades) {
             fechaMostrar = fechaSolo.split('-').reverse().join('-');
         }
 
-       let horarioMostrar = "N/A";
-
+   
+        let horarioMostrar = "N/A";
         let horarioRaw = getData('Horario');
         if (horarioRaw) {
-            // Como ahora viene como texto directo del Excel ("10:55"), solo tomamos los primeros 5 caracteres por seguridad
-            horarioMostrar = horarioRaw;
+            let strHorario = horarioRaw.toString().trim();
+            
+            // Si viene con el formato ISO de Google (ej: 1899-12-30T10:55:00)
+            if (strHorario.includes('T')) {
+                // Corta después de la 'T' y toma los primeros 5 caracteres de la hora
+                horarioMostrar = strHorario.split('T')[1].substring(0, 5);
+            } else {
+                // Si ya venía limpio del Excel ("10:55"), toma los primeros 5 caracteres
+                horarioMostrar = strHorario.substring(0, 5);
+            }
         }
 
         const docente = getData('Docente') || 'Sin nombre';
