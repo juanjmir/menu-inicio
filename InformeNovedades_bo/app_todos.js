@@ -84,6 +84,14 @@ function renderTabla(novedades) {
                 horarioMostrar = horarioRaw;
             }
         }
+        let Fechacierreraw = getData('fecha termino');
+        if (Fechacierreraw) {
+            if (Fechacierreraw.toString().includes('T')) {
+                cierreMostrar = Fechacierreraw.split('T')[1].substring(0, 5);
+            } else {
+                cierreMostrar = Fechacierreraw;
+            }
+        }
         const estado = getData('Estado') || 'Pendiente';
         const docente = getData('Docente') || 'Sin nombre';
         const asignatura = getData('Asignatura') || 'N/A';
@@ -99,14 +107,14 @@ function renderTabla(novedades) {
         row.innerHTML = `
             <td>${estado}</td>
             <td>${fechaMostrar}</td>
-            <td>${horarioRaw} hrs</td>
+            <td>${horarioMostrar} hrs</td>
             <td style="text-align: center;"><span class="table-badge">${laboratorio}</span></td>
             <td><strong>${docente}</strong></td>
             <td>${asignatura}</td>
             <td>${tipo}</td>
             <td>${detalle}</td>
             <td>${encargado}</td>
-            <td>${fecha_fin}</td>
+            <td>${cierreMostrar}</td>
         `;
 
         tbody.appendChild(row);
