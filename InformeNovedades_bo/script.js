@@ -1,90 +1,97 @@
 
-const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
 const URL_API_ACTUALIZAR = "https://script.google.com/macros/s/AKfycbyTwvTRAX1nO6LM2odG7ajFJCyCbMEx9up9PvHecGocSqdjvruHxkccxTunfoqd-Mxp/exec"; 
+const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
+
 
 const grid = document.getElementById('novedadesGrid');
 let datosExcel = []; 
 
-// --- INYECCIÓN DINÁMICA DE ESTILOS PARA EL MODAL ---
-const estilosModal = document.createElement('style');
-estilosModal.innerHTML = `
-    .modal-rol { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
-    .modal-rol-content { background-color: #fff; padding: 20px; border-radius: 8px; width: 320px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-family: sans-serif;}
-    .modal-rol select { width: 100%; padding: 10px; margin: 15px 0; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem;}
-    .modal-rol button { padding: 8px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
-    .btn-confirmar { background-color: #28a745; color: white; }
-    .btn-cancelar { background-color: #dc3545; color: white; }
-`;
-document.head.appendChild(estilosModal);
+// --- CREACIÓN DEL DIALOG (MODAL NATIVO) ---
+// Borramos cualquier intento previo si existía
+const modalViejo = document.getElementById('modalRolDialog');
+if(modalViejo) modalViejo.remove();
 
-// --- CREACIÓN DINÁMICA DEL CONTENEDOR MODAL EN EL HTML ---
-const modalContainer = document.createElement('div');
-modalContainer.id = 'modalRol';
-modalContainer.className = 'modal-rol';
-modalContainer.innerHTML = `
-    <div class="modal-rol-content">
-        <h3>Finalizar Novedad</h3>
-        <p>Selecciona tu Rol para firmar el cambio:</p>
-        <select id="selectRol">
-            <option value="DC">DC</option>
-            <option value="CC AUTOMATIZACION">CC AUTOMATIZACION</option>
-            <option value="CC INFORMATICA">CC INFORMATICA</option>
-            <option value="PAÑOL AUTOMATIZACION">PAÑOL AUTOMATIZACION</option>
-            <option value="PAÑOL INFORMATICA">PAÑOL INFORMATICA</option>
-        </select>
-        <button id="btnConfirmarRol" class="btn-confirmar">Confirmar</button>
-        <button id="btnCancelarRol" class="btn-cancelar">Cancelar</button>
+const dialog = document.createElement('dialog');
+dialog.id = 'modalRolDialog';
+dialog.style.padding = '20px';
+dialog.style.borderRadius = '8px';
+dialog.style.border = '1px solid #ccc';
+dialog.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+dialog.style.width = '300px';
+dialog.style.textAlign = 'center';
+
+dialog.innerHTML = `
+    <h3 style="margin-top:0;">Finalizar Novedad</h3>
+    <p>Selecciona tu Rol para firmar:</p>
+    <select id="selectRol" style="width: 100%; padding: 8px; margin-bottom: 15px;">
+        <option value="DC">DC</option>
+        <option value="CC AUTOMATIZACION">CC AUTOMATIZACION</option>
+        <option value="CC INFORMATICA">CC INFORMATICA</option>
+        <option value="PAÑOL AUTOMATIZACION">PAÑOL AUTOMATIZACION</option>
+        <option value="PAÑOL INFORMATICA">PAÑOL INFORMATICA</option>
+    </select>
+    <div style="display: flex; justify-content: space-around;">
+        <button id="btnConfirmarRol" style="background:#28a745; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; font-weight:bold;">Confirmar</button>
+        <button id="btnCancelarRol" style="background:#dc3545; color:white; border:none; padding:8px 12px; border-radius:4px; cursor:pointer; font-weight:bold;">Cancelar</button>
     </div>
 `;
-document.body.appendChild(modalContainer);
+document.body.appendChild(dialog);
 
+// Variables globales de control para el registro activo
 let checkboxActual = null;
 let cardActual = null;
 let itemActual = null;
 
-// Acciones del modal
+// Evento Cancelar Modal
 document.getElementById('btnCancelarRol').addEventListener('click', () => {
-    if (checkboxActual) checkboxActual.checked = false; 
-    modalContainer.style.display = 'none';
+    if (checkboxActual) checkboxActual.checked = false; // Desmarca el checkbox si cancela
+    dialog.close();
 });
 
+// Evento Confirmar Modal -> Aquí es donde se envía al Excel y se oculta la card
 document.getElementById('btnConfirmarRol').addEventListener('click', async () => {
     const rolSeleccionado = document.getElementById('selectRol').value;
-    modalContainer.style.display = 'none';
+    dialog.close();
 
     if (itemActual) {
+        // Buscamos la llave 'folio' sin importar mayúsculas/minúsculas
         const foundKeyFolio = Object.keys(itemActual).find(k => k.toLowerCase().trim() === 'folio');
         const folioId = foundKeyFolio ? itemActual[foundKeyFolio] : null;
 
         if (!folioId) {
-            alert("Error: No se encontró el Folio de este registro.");
-            checkboxActual.checked = false;
+            alert("Error: Este registro no posee un 'Folio' visible.");
+            if (checkboxActual) checkboxActual.checked = false;
             return;
         }
 
-        // Ocultar la card visualmente al instante
-        cardActual.hidden = true;
-        cardActual.classList.add('hidden-card');
+        // 1. RECIÉN AQUÍ ocultamos la tarjeta de la pantalla
+        if (cardActual) {
+            cardActual.hidden = true;
+            cardActual.classList.add('hidden-card');
+        }
 
-        // Enviamos la petición exclusivamente a la NUEVA API
+        // 2. Enviamos los datos al nuevo Apps Script
         try {
+            console.log("Enviando actualización para Folio:", folioId, "Rol:", rolSeleccionado);
+            
             await fetch(URL_API_ACTUALIZAR, {
                 method: 'POST',
-                mode: 'no-cors', 
+                mode: 'no-cors', // Necesario para evitar bloqueos de CORS con Google Apps Script
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     folio: folioId,
                     encargado: rolSeleccionado
                 })
             });
-            console.log("Actualización enviada para Folio:", folioId);
+            
+            console.log("Petición enviada al servidor con éxito.");
         } catch (error) {
-            console.error("Error al conectar con la API de actualización:", error);
+            console.error("Error en la conexión con la API de actualización:", error);
         }
     }
 });
 
-// 1. Función para obtener los datos de Google Sheets (Tu lógica intacta)
+// Función para obtener los datos de Google Sheets
 async function obtenerDatos() {
     try {
         grid.innerHTML = '<p style="text-align:center; width:100%;">Cargando novedades...</p>';
@@ -102,7 +109,7 @@ async function obtenerDatos() {
     }
 }
 
-// 2. Función para crear las tarjetas en el HTML (Actualizada para ocultar 'terminado')
+// Función para renderizar las tarjetas
 function renderCards(novedades) {
     grid.innerHTML = ''; 
     
@@ -118,7 +125,7 @@ function renderCards(novedades) {
         const estadoKey = Object.keys(item).find(k => k.toLowerCase().trim() === 'estado');
         const estado = estadoKey ? item[estadoKey] : '';
         
-        // Se oculta de la vista si está 'completado' o 'terminado'
+        // Ocultar si ya está completado o terminado en la base de datos
         const completadoChecked = estado && (estado.toString().toLowerCase().trim() === 'completado' || estado.toString().toLowerCase().trim() === 'terminado');
 
         if (completadoChecked) {
@@ -126,19 +133,15 @@ function renderCards(novedades) {
             card.classList.add('hidden-card');
         }
 
-        // --- FORMATEO DE FECHA ---
         let fechaMostrar = "";
         let fechaRaw = getData('Fecha') || getData('Fecha informe');
-        
         if (fechaRaw) {
             const fechaSolo = fechaRaw.toString().includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
             fechaMostrar = fechaSolo.split('-').reverse().join('-');
         }
 
-        // --- FORMATEO DE HORARIO ---
         let horarioMostrar = "";
         let horarioRaw = getData('Horario');
-
         if (horarioRaw) {
             if (horarioRaw.toString().includes('T')) {
                 horarioMostrar = horarioRaw.split('T')[1].substring(0, 5);
@@ -173,10 +176,13 @@ function renderCards(novedades) {
         if (checkbox) {
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
+                    // Guardamos las referencias de la tarjeta clickeada
                     checkboxActual = checkbox;
                     cardActual = card;
                     itemActual = item;
-                    modalContainer.style.display = 'flex';
+                    
+                    // Abrimos el modal nativo en pantalla
+                    dialog.showModal();
                 }
             });
         }
