@@ -81,7 +81,7 @@ function renderTabla(novedades) {
         }
 
 
-   
+        const fechaMostrar = getData('fecha informe') || '';
         const estado = getData('Estado') || 'Pendiente';
         const docente = getData('Docente') || 'Sin nombre';
         const asignatura = getData('Asignatura') || 'N/A';
