@@ -99,7 +99,7 @@ function renderTabla(novedades) {
         row.innerHTML = `
             <td>${estado}</td>
             <td>${fechaMostrar}</td>
-            <td>${horarioMostrar} hrs</td>
+            <td>${horarioRaw} hrs</td>
             <td style="text-align: center;"><span class="table-badge">${laboratorio}</span></td>
             <td><strong>${docente}</strong></td>
             <td>${asignatura}</td>
