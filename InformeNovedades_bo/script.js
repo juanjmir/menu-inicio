@@ -146,7 +146,7 @@ function renderCards(novedades) {
         let horarioRaw = getData('Horario');
         if (horarioRaw) {
             // Como ahora viene como texto directo del Excel ("10:55"), solo tomamos los primeros 5 caracteres por seguridad
-            horarioMostrar = horarioRaw.toString().trim().substring(0, 5);
+            horarioMostrar = horarioRaw;
         }
 
         const docente = getData('Docente') || 'Sin nombre';
