@@ -47,7 +47,8 @@ function renderTabla(novedades) {
                 <th>Docente</th>
                 <th>Asignatura</th>
                 <th>Problema Detectado</th>
-                <th>Descripción General</th>
+                <th>Cerrado Por</th>
+                <th>Fecha Cierre</th>
             </tr>
         </thead>
         <tbody></tbody>
