@@ -67,11 +67,17 @@ function renderTabla(novedades) {
 
 
         // --- FORMATEO DE FECHA ---
-        let fechaMostrar = "";
-        let fechaRaw = getData('Fecha') || getData('Fecha informe');
-        if (fechaRaw) {
-            const fechaSolo = fechaRaw.toString().includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
-            fechaMostrar = fechaSolo.split('-').reverse().join('-');
+        let horarioMostrar = "N/A";
+        let horarioRaw = getData('Horario');
+        if (horarioRaw) {
+            let strHorario = horarioRaw.toString();
+            if (strHorario.includes('T')) {
+                // Extrae lo que está después de la 'T' (ej: "15:37:45.000Z") y toma solo los primeros 5 caracteres ("15:37")
+                horarioMostrar = strHorario.split('T')[1].substring(0, 5);
+            } else {
+                // Si ya venía limpio o en otro formato, solo tomamos los primeros 5 caracteres
+                horarioMostrar = strHorario.trim().substring(0, 5);
+            }
         }
 
         // --- FORMATEO DE HORARIO ---
