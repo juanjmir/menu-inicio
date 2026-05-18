@@ -104,7 +104,7 @@ function renderTabla(novedades) {
             <td>${tipo}</td>
             <td>${detalle}</td>
             <td>${encargado}</td>
-            <td>${cierreMostrar}</td>
+            <td>${fecha_fin}</td>
         `;
 
         tbody.appendChild(row);
