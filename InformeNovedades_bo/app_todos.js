@@ -63,9 +63,7 @@ function renderTabla(novedades) {
             return foundKey ? item[foundKey] : null;
         };
 
-        const estadoKey = Object.keys(item).find(k => k.toLowerCase().trim() === 'estado');
-        const estado = estadoKey ? item[estadoKey] : '';
-        const completadoChecked = estado && estado.toString().toLowerCase().trim() === 'completado';
+
 
         // --- FORMATEO DE FECHA ---
         let fechaMostrar = "";
@@ -85,20 +83,20 @@ function renderTabla(novedades) {
                 horarioMostrar = horarioRaw;
             }
         }
-
+        const estado = getData('Estado') || 'Pendiente';
         const docente = getData('Docente') || 'Sin nombre';
         const asignatura = getData('Asignatura') || 'N/A';
         const laboratorio = getData('Laboratorio') || 'S/N';
         const tipo = getData('PROBLEMAS DETECTADOS') || 'General';
         const detalle = getData('DESCRIPCION GENERAL') || 'Sin detalle';
+        const encargador = getData('encargado') || 'Sin detalle';
+        const fecha_fin = getData('fecha termino') || 'Sin detalle';
 
         // Creamos la fila
         const row = document.createElement('tr');
    
         row.innerHTML = `
-            <td style="text-align: center;">
-                <input class="form-check-input table-checkbox" type="checkbox" id="completado-${index}" ${completadoChecked ? 'checked' : ''}>
-            </td>
+            <td>${estado}</td>
             <td>${fechaMostrar}</td>
             <td>${horarioMostrar} hrs</td>
             <td style="text-align: center;"><span class="table-badge">${laboratorio}</span></td>
@@ -106,6 +104,8 @@ function renderTabla(novedades) {
             <td>${asignatura}</td>
             <td>${tipo}</td>
             <td>${detalle}</td>
+            <td>${encargado}</td>
+            <td>${fecha_fin}</td>
         `;
 
         tbody.appendChild(row);
