@@ -95,13 +95,13 @@ function renderTabla(novedades) {
             fechaMostrar = fechaSolo.trim().split('-').reverse().join('-');
         }   
 
-        let fechaMostrar = "N/A";
+        let fechaMostrar2 = "N/A";
         let fechaRaw = getData('Fecha termino'); 
         if (fechaRaw) {
             // Separa el texto en la 'T' para eliminar "T04:00:00.000Z" y quedarse con "2026-05-19"
             const fechaSolo = fechaRaw.toString().includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
             // Da vuelta el orden: de YYYY-MM-DD a DD-MM-YYYY
-            fechaMostrar = fechaSolo.trim().split('-').reverse().join('-');
+            fechaMostrar2 = fechaSolo.trim().split('-').reverse().join('-');
         }   
 
 
@@ -112,7 +112,7 @@ function renderTabla(novedades) {
         const tipo = getData('PROBLEMAS DETECTADOS') || 'General';
         const detalle = getData('DESCRIPCION GENERAL') || 'Sin detalle';
         const encargado = getData('encargado') || 'Sin Cierre';
-        const fecha_fin = getData('fecha termino') || 'Sin Cierre';
+      
 
         // Creamos la fila
         const row = document.createElement('tr');
@@ -127,7 +127,7 @@ function renderTabla(novedades) {
             <td>${tipo}</td>
             <td>${detalle}</td>
             <td>${encargado}</td>
-            <td>${fecha_fin}</td>
+            <td>${fechaMostrar2}</td>
         `;
 
         tbody.appendChild(row);
