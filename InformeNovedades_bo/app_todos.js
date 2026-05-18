@@ -68,22 +68,11 @@ function renderTabla(novedades) {
 
         // --- FORMATEO DE FECHA ---
      let horarioMostrar = "N/A";
+
         let horarioRaw = getData('Horario');
         if (horarioRaw) {
-            let fechaObjeto = new Date(horarioRaw);
-            
-            // Si es una fecha válida (objeto de Google), la forzamos a mostrar su hora real en formato 24h
-            if (!isNaN(fechaObjeto.getTime())) {
-                horarioMostrar = fechaObjeto.toLocaleTimeString('es-CL', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false,
-                    timeZone: 'UTC' // Evita que el navegador le sume o reste horas por tu zona horaria local
-                });
-            } else {
-                // Si por alguna razón ya venía como un texto limpio ("10:55"), lo corta directo
-                horarioMostrar = horarioRaw.toString().trim().substring(0, 5);
-            }
+            // Como ahora viene como texto directo del Excel ("10:55"), solo tomamos los primeros 5 caracteres por seguridad
+            horarioMostrar = horarioRaw.toString().trim().substring(0, 5);
         }
 
         let fechaMostrar = "N/A";
