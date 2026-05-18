@@ -85,12 +85,12 @@ function renderTabla(novedades) {
         }   
 
         let fechaMostrar2 = "N/A";
-        let fechaRaw = getData('Fecha termino'); 
-        if (fechaRaw) {
+        let fechaRaw2 = getData('Fecha termino'); 
+        if (fechaRaw2) {
             // Separa el texto en la 'T' para eliminar "T04:00:00.000Z" y quedarse con "2026-05-19"
-            const fechaSolo = fechaRaw.toString().includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
+            const fechaSolo2 = fechaRaw2.toString().includes('T') ? fechaRaw2.split('T')[0] : fechaRaw2;
             // Da vuelta el orden: de YYYY-MM-DD a DD-MM-YYYY
-            fechaMostrar2 = fechaSolo.trim().split('-').reverse().join('-');
+            fechaMostrar2 = fechaSolo2.trim().split('-').reverse().join('-');
         }   
 
 
