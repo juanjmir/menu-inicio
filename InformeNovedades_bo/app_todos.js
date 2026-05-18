@@ -79,9 +79,16 @@ function renderTabla(novedades) {
                 horarioMostrar = strHorario.trim().substring(0, 5);
             }
         }
+        let fechaMostrar = "N/A";
+        let fechaRaw = getData('Fecha') || getData('Fecha informe'); // Captura cualquiera de los dos nombres
+        if (fechaRaw) {
+            // Separa el texto en la 'T' para eliminar "T04:00:00.000Z" y quedarse con "2026-05-19"
+            const fechaSolo = fechaRaw.toString().includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
+            // Da vuelta el orden: de YYYY-MM-DD a DD-MM-YYYY
+            fechaMostrar = fechaSolo.trim().split('-').reverse().join('-');
+        }   
 
 
-        const fechaMostrar = getData('fecha informe') || '';
         const estado = getData('Estado') || 'Pendiente';
         const docente = getData('Docente') || 'Sin nombre';
         const asignatura = getData('Asignatura') || 'N/A';
