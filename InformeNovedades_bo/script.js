@@ -141,14 +141,12 @@ function renderCards(novedades) {
             fechaMostrar = fechaSolo.split('-').reverse().join('-');
         }
 
-        let horarioMostrar = "";
+       let horarioMostrar = "N/A";
+
         let horarioRaw = getData('Horario');
         if (horarioRaw) {
-            if (horarioRaw.toString().includes('T')) {
-                horarioMostrar = horarioRaw.split('T')[1].substring(0, 5);
-            } else {
-                horarioMostrar = horarioRaw;
-            }
+            // Como ahora viene como texto directo del Excel ("10:55"), solo tomamos los primeros 5 caracteres por seguridad
+            horarioMostrar = horarioRaw.toString().trim().substring(0, 5);
         }
 
         const docente = getData('Docente') || 'Sin nombre';
