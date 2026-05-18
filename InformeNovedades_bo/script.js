@@ -1,10 +1,90 @@
+
 const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
+const URL_API_ACTUALIZAR = "https://script.google.com/macros/s/AKfycbyTwvTRAX1nO6LM2odG7ajFJCyCbMEx9up9PvHecGocSqdjvruHxkccxTunfoqd-Mxp/exec"; 
 
 const grid = document.getElementById('novedadesGrid');
+let datosExcel = []; 
 
-let datosExcel = []; // Aquí se guardarán los datos que vienen de Google
+// --- INYECCIÓN DINÁMICA DE ESTILOS PARA EL MODAL ---
+const estilosModal = document.createElement('style');
+estilosModal.innerHTML = `
+    .modal-rol { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); align-items: center; justify-content: center; }
+    .modal-rol-content { background-color: #fff; padding: 20px; border-radius: 8px; width: 320px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); font-family: sans-serif;}
+    .modal-rol select { width: 100%; padding: 10px; margin: 15px 0; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem;}
+    .modal-rol button { padding: 8px 15px; margin: 5px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .btn-confirmar { background-color: #28a745; color: white; }
+    .btn-cancelar { background-color: #dc3545; color: white; }
+`;
+document.head.appendChild(estilosModal);
 
-// 1. Función para obtener los datos de Google Sheets
+// --- CREACIÓN DINÁMICA DEL CONTENEDOR MODAL EN EL HTML ---
+const modalContainer = document.createElement('div');
+modalContainer.id = 'modalRol';
+modalContainer.className = 'modal-rol';
+modalContainer.innerHTML = `
+    <div class="modal-rol-content">
+        <h3>Finalizar Novedad</h3>
+        <p>Selecciona tu Rol para firmar el cambio:</p>
+        <select id="selectRol">
+            <option value="DC">DC</option>
+            <option value="CC AUTOMATIZACION">CC AUTOMATIZACION</option>
+            <option value="CC INFORMATICA">CC INFORMATICA</option>
+            <option value="PAÑOL AUTOMATIZACION">PAÑOL AUTOMATIZACION</option>
+            <option value="PAÑOL INFORMATICA">PAÑOL INFORMATICA</option>
+        </select>
+        <button id="btnConfirmarRol" class="btn-confirmar">Confirmar</button>
+        <button id="btnCancelarRol" class="btn-cancelar">Cancelar</button>
+    </div>
+`;
+document.body.appendChild(modalContainer);
+
+let checkboxActual = null;
+let cardActual = null;
+let itemActual = null;
+
+// Acciones del modal
+document.getElementById('btnCancelarRol').addEventListener('click', () => {
+    if (checkboxActual) checkboxActual.checked = false; 
+    modalContainer.style.display = 'none';
+});
+
+document.getElementById('btnConfirmarRol').addEventListener('click', async () => {
+    const rolSeleccionado = document.getElementById('selectRol').value;
+    modalContainer.style.display = 'none';
+
+    if (itemActual) {
+        const foundKeyFolio = Object.keys(itemActual).find(k => k.toLowerCase().trim() === 'folio');
+        const folioId = foundKeyFolio ? itemActual[foundKeyFolio] : null;
+
+        if (!folioId) {
+            alert("Error: No se encontró el Folio de este registro.");
+            checkboxActual.checked = false;
+            return;
+        }
+
+        // Ocultar la card visualmente al instante
+        cardActual.hidden = true;
+        cardActual.classList.add('hidden-card');
+
+        // Enviamos la petición exclusivamente a la NUEVA API
+        try {
+            await fetch(URL_API_ACTUALIZAR, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    folio: folioId,
+                    encargado: rolSeleccionado
+                })
+            });
+            console.log("Actualización enviada para Folio:", folioId);
+        } catch (error) {
+            console.error("Error al conectar con la API de actualización:", error);
+        }
+    }
+});
+
+// 1. Función para obtener los datos de Google Sheets (Tu lógica intacta)
 async function obtenerDatos() {
     try {
         grid.innerHTML = '<p style="text-align:center; width:100%;">Cargando novedades...</p>';
@@ -22,7 +102,7 @@ async function obtenerDatos() {
     }
 }
 
-// 2. Función para crear las tarjetas en el HTML
+// 2. Función para crear las tarjetas en el HTML (Actualizada para ocultar 'terminado')
 function renderCards(novedades) {
     grid.innerHTML = ''; 
     
@@ -37,7 +117,9 @@ function renderCards(novedades) {
 
         const estadoKey = Object.keys(item).find(k => k.toLowerCase().trim() === 'estado');
         const estado = estadoKey ? item[estadoKey] : '';
-        const completadoChecked = estado && estado.toString().toLowerCase().trim() === 'completado';
+        
+        // Se oculta de la vista si está 'completado' o 'terminado'
+        const completadoChecked = estado && (estado.toString().toLowerCase().trim() === 'completado' || estado.toString().toLowerCase().trim() === 'terminado');
 
         if (completadoChecked) {
             card.hidden = true;
@@ -49,10 +131,7 @@ function renderCards(novedades) {
         let fechaRaw = getData('Fecha') || getData('Fecha informe');
         
         if (fechaRaw) {
-            // 1. Extraemos solo la parte de la fecha (YYYY-MM-DD)
             const fechaSolo = fechaRaw.toString().includes('T') ? fechaRaw.split('T')[0] : fechaRaw;
-    
-            // 2. REORDENAMOS: de YYYY-MM-DD a DD-MM-YYYY
             fechaMostrar = fechaSolo.split('-').reverse().join('-');
         }
 
@@ -61,9 +140,7 @@ function renderCards(novedades) {
         let horarioRaw = getData('Horario');
 
         if (horarioRaw) {
-            // Si viene el error de 1899, extraemos solo la hora
             if (horarioRaw.toString().includes('T')) {
-                // Extrae "10:00" de "1899-12-30T10:00:00.000Z"
                 horarioMostrar = horarioRaw.split('T')[1].substring(0, 5);
             } else {
                 horarioMostrar = horarioRaw;
@@ -96,13 +173,10 @@ function renderCards(novedades) {
         if (checkbox) {
             checkbox.addEventListener('change', () => {
                 if (checkbox.checked) {
-                    if (estadoKey) {
-                        item[estadoKey] = 'Completado';
-                    } else {
-                        item.Estado = 'Completado';
-                    }
-                    card.hidden = true;
-                    card.classList.add('hidden-card');
+                    checkboxActual = checkbox;
+                    cardActual = card;
+                    itemActual = item;
+                    modalContainer.style.display = 'flex';
                 }
             });
         }
@@ -111,6 +185,4 @@ function renderCards(novedades) {
     });
 }
 
-
-//  Ejecutar la carga al abrir la página
 obtenerDatos();
