@@ -80,24 +80,8 @@ function renderTabla(novedades) {
             }
         }
 
-        // --- FORMATEO DE HORARIO ---
-        let horarioMostrar = "";
-        let horarioRaw = getData('Horario');
-        if (horarioRaw) {
-            if (horarioRaw.toString().includes('T')) {
-                horarioMostrar = horarioRaw.split('T')[1].substring(0, 5);
-            } else {
-                horarioMostrar = horarioRaw;
-            }
-        }
-        let Fechacierreraw = getData('fecha termino');
-        if (Fechacierreraw) {
-            if (Fechacierreraw.toString().includes('T')) {
-                cierreMostrar = Fechacierreraw.split('T')[1].substring(0, 5);
-            } else {
-                cierreMostrar = Fechacierreraw;
-            }
-        }
+
+   
         const estado = getData('Estado') || 'Pendiente';
         const docente = getData('Docente') || 'Sin nombre';
         const asignatura = getData('Asignatura') || 'N/A';
