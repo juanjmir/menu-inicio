@@ -67,18 +67,25 @@ function renderTabla(novedades) {
 
 
         // --- FORMATEO DE FECHA ---
-        let horarioMostrar = "N/A";
+     let horarioMostrar = "N/A";
         let horarioRaw = getData('Horario');
         if (horarioRaw) {
-            let strHorario = horarioRaw.toString();
-            if (strHorario.includes('T')) {
-                // Extrae lo que está después de la 'T' (ej: "15:37:45.000Z") y toma solo los primeros 5 caracteres ("15:37")
-                horarioMostrar = strHorario.split('T')[1].substring(0, 5);
+            let fechaObjeto = new Date(horarioRaw);
+            
+            // Si es una fecha válida (objeto de Google), la forzamos a mostrar su hora real en formato 24h
+            if (!isNaN(fechaObjeto.getTime())) {
+                horarioMostrar = fechaObjeto.toLocaleTimeString('es-CL', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                    timeZone: 'UTC' // Evita que el navegador le sume o reste horas por tu zona horaria local
+                });
             } else {
-                // Si ya venía limpio o en otro formato, solo tomamos los primeros 5 caracteres
-                horarioMostrar = strHorario.trim().substring(0, 5);
+                // Si por alguna razón ya venía como un texto limpio ("10:55"), lo corta directo
+                horarioMostrar = horarioRaw.toString().trim().substring(0, 5);
             }
         }
+        
         let fechaMostrar = "N/A";
         let fechaRaw = getData('Fecha') || getData('Fecha informe'); // Captura cualquiera de los dos nombres
         if (fechaRaw) {
