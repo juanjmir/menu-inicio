@@ -98,8 +98,8 @@ function renderTabla(novedades) {
         const laboratorio = getData('Laboratorio') || 'S/N';
         const tipo = getData('PROBLEMAS DETECTADOS') || 'General';
         const detalle = getData('DESCRIPCION GENERAL') || 'Sin detalle';
-        const encargado = getData('encargado') || 'Sin detalle';
-        const fecha_fin = getData('fecha termino') || 'Sin detalle';
+        const encargado = getData('encargado') || 'Sin Cierre';
+        const fecha_fin = getData('fecha termino') || 'Sin Cierre';
 
         // Creamos la fila
         const row = document.createElement('tr');
