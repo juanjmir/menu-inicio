@@ -1,4 +1,4 @@
-const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbxPOWtqDAn-cMqj90zVPJrQH6JqP8JE7S3FMg1FssHT_CSKer1NksTYfcALhcmVlCL4/exec";
+const URL_API_EXCEL = "https://script.google.com/macros/s/AKfycbwcLbLrSY2vp6P03iTW6O4p2zDLzRESxqiY3qKh86r433vgnlivuOrKCgv-sTh7ImFqug/exec";
 
 const grid = document.getElementById('novedadesGrid');
 
